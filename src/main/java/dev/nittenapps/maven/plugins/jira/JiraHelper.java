@@ -16,15 +16,10 @@
 
 package dev.nittenapps.maven.plugins.jira;
 
-import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.plugin.logging.Log;
 
 class JiraHelper {
     private static final String PID = "?pid=";
@@ -98,44 +93,6 @@ class JiraHelper {
         urlMap.put("url", jiraUrl);
         urlMap.put("project", project);
         return urlMap;
-    }
-
-    /**
-     * Try to get a JIRA pid from the issue management URL.
-     *
-     * @param log                Used to tell the user what happened
-     * @param issueManagementUrl The URL to the issue management system
-     * @param client             The client used to connect to JIRA
-     * @return The JIRA id for the project, or null if it can't be found
-     */
-    public static String getPidFromJira(Log log, String issueManagementUrl, HttpClient client) {
-        String jiraId = null;
-        GetMethod gm = new GetMethod(issueManagementUrl);
-
-        String projectPage;
-        try {
-            client.executeMethod(gm);
-            log.debug("Successfully reached JIRA.");
-            projectPage = gm.getResponseBodyAsString();
-        } catch (Exception ex) {
-            if (log.isDebugEnabled()) {
-                log.error("Unable to reach the JIRA project page:", ex);
-            } else {
-                log.error("Unable to reach the JIRA project page. Cause is: " + ex.getLocalizedMessage());
-            }
-            return null;
-        }
-
-        int pidIndex = projectPage.indexOf(PID);
-        if (pidIndex == -1) {
-            log.error("Unable to extract a JIRA pid from the page at the url " + issueManagementUrl);
-        } else {
-            NumberFormat format = NumberFormat.getInstance();
-            Number pidNumber = format.parse(projectPage, new ParsePosition(pidIndex + PID.length()));
-            jiraId = Integer.toString(pidNumber.intValue());
-            log.debug("Found the pid " + jiraId + " at " + issueManagementUrl);
-        }
-        return jiraId;
     }
 
     private JiraHelper() {

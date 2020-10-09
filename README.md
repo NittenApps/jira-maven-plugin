@@ -3,7 +3,7 @@ Collection of maven goals to work with the JIRA Cloud platform, by using the
 [JIRA REST API v3](https://developer.atlassian.com/cloud/jira/platform/rest/v3/).
 
 This plugin is based on the [maven-changes-plugin](http://maven.apache.org/plugins/maven-changes-plugin/) plugin,
-addressing the cloud platform authentication, and uses the version 3 of the API.
+addressing the cloud platform authentication, and using the version 3 of the JIRA REST API.
 
 ## Usage
 This project acts as a regular reporting plugin, so you only need to add it to your reporting plugins list.
@@ -60,17 +60,29 @@ git clone -b main git@github.com:<username>/jira-maven-plugin.git
 Note the `-b main` argument, it is required to clone the `main` branch, and not the `develop` branch, which is the
 default branch in this repo.
 
+### Initialize git-flow
 After that initialize the local git-flow repository
 
 ```shell
 git flow init -d
+```
+
+### Code your feature
+Before start coding your new feature run
+
+```shell
 git flow feature start <your feature>
 ```
 
-Now you can start coding and committing your work. When your done with the new feature publish it to your fork
+Now you can start coding and committing your work.
+
+### Publish your new feature
+When your done with the new feature publish it to your fork
 
 ```shell
 git flow feature publish <your feature>
 ```
+
+### Open a pull request
 
 Then open a pull request to your feature branch.

@@ -55,8 +55,8 @@
   </scm>
 
   <issueManagement>
-    <system>jira</system>
-    <url>https://nittenapps.atlassian.net/browse/MJIRA</url>
+    <system>github</system>
+    <url>https://github.com/nittenapps/jira-maven-plugin/issues</url>
   </issueManagement>
 
   <licenses>
@@ -80,7 +80,7 @@
     <dependency>
       <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-      <version>16.0.2</version>
+      <version>20.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -88,19 +88,14 @@
       <version>4.4</version>
     </dependency>
     <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
-      <version>3.1</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.10</version>
+      <version>3.11</version>
     </dependency>
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-rs-client</artifactId>
-      <version>3.3.6</version>
+      <version>3.4.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
@@ -115,12 +110,12 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>2.11.1</version>
+      <version>2.11.3</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.11.1</version>
+      <version>2.11.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -155,7 +150,7 @@
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-impl</artifactId>
-      <version>2.3</version>
+      <version>3.0.0</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.maven</groupId>
@@ -171,7 +166,7 @@
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
-      <version>3.2.0</version>
+      <version>3.4.0</version>
     </dependency>
   </dependencies>
 
@@ -182,16 +177,23 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-changes-plugin</artifactId>
+          <version>2.12.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>3.1.1</version>
-          <!--configuration>
-            <configLocation>checkstyle.xml</configLocation>
-          </configuration-->
           <dependencies>
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
@@ -211,6 +213,12 @@
           <version>3.8.1</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.0.0-M1</version>
         </plugin>
@@ -218,6 +226,16 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>3.0.0-M3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.0.0-M1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -233,6 +251,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.1.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>3.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -334,18 +357,36 @@
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-changes-plugin</artifactId>
+            <reportSets>
+              <reportSet>
+                <reports>
+                  <report>github-report</report>
+                </reports>
+              </reportSet>
+            </reportSets>
+            <configuration>
+              <onlyCurrentVersion>true</onlyCurrentVersion>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
             <configuration>
               <enableRSS>false</enableRSS>
             </configuration>
           </plugin>
           <plugin>
-            <groupId>dev.nittenapps.maven.plugins</groupId>
-            <artifactId>jira-maven-plugin</artifactId>
-            <version>${project.version}</version>
-            <configuration>
-              <onlyCurrentVersion>true</onlyCurrentVersion>
-            </configuration>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.2.0</version>
+            <reportSets>
+              <reportSet>
+                <reports>
+                  <report>javadoc</report>
+                </reports>
+              </reportSet>
+            </reportSets>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -374,8 +415,31 @@
               </reportSet>
             </reportSets>
           </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>versions-maven-plugin</artifactId>
+            <version>2.8.1</version>
+            <reportSets>
+              <reportSet>
+                <reports>
+                  <report>dependency-updates-report</report>
+                  <report>plugin-updates-report</report>
+                  <report>property-updates-report</report>
+                </reports>
+              </reportSet>
+            </reportSets>
+          </plugin>
         </plugins>
       </reporting>
+    </profile>
+    <profile>
+      <id>jdk-11-config</id>
+      <activation>
+        <jdk>11</jdk>
+      </activation>
+      <properties>
+        <javadocExecutable>/Library/Java/JavaVirtualMachines/jdk-11.0.5.jdk/Contents/Home/bin/javadoc</javadocExecutable>
+      </properties>
     </profile>
   </profiles>
 </project>

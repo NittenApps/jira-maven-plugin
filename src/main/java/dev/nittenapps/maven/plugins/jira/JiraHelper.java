@@ -22,8 +22,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 class JiraHelper {
-    private static final String PID = "?pid=";
-
     /**
      * Get the base URL for the JIRA server.
      *

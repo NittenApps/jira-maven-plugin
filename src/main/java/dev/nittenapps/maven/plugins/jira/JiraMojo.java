@@ -221,7 +221,7 @@ public class JiraMojo extends AbstractJiraReport {
         }
 
         try {
-            AbstractJiraDownloader issueDownloader = new RestJiraDownloader();
+            AbstractJiraDownloader issueDownloader = new RestJiraDownloader(locale);
             configureIssueDownloader(issueDownloader);
             issueDownloader.doExecute();
 

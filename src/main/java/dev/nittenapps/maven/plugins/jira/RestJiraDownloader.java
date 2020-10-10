@@ -56,9 +56,12 @@ class RestJiraDownloader extends AbstractJiraDownloader {
 
     private final SimpleDateFormat dateFormat;
 
-    public RestJiraDownloader() {
+    private final Locale locale;
+
+    public RestJiraDownloader(Locale locale) {
         jsonFactory = new MappingJsonFactory();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        this.locale = locale;
     }
 
     @Override
@@ -104,6 +107,8 @@ class RestJiraDownloader extends AbstractJiraDownloader {
         client.replacePath("/rest/api/3/search");
         client.type(MediaType.APPLICATION_JSON_TYPE);
         client.accept(MediaType.APPLICATION_JSON_TYPE);
+        client.acceptLanguage(locale.getLanguage());
+        client.header("X-Force-Accept-Language", true);
         Response searchResponse = client.post(searchParamStringWriter.toString());
         if (searchResponse.getStatus() != Response.Status.OK.getStatusCode()) {
             reportErrors(searchResponse);

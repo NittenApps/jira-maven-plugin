@@ -22,10 +22,10 @@
 
   <groupId>dev.nittenapps.maven.plugins</groupId>
   <artifactId>jira-maven-plugin</artifactId>
-  <packaging>maven-plugin</packaging>
   <version>0.1.0-SNAPSHOT</version>
+  <packaging>maven-plugin</packaging>
   <name>Maven JIRA Plugin</name>
-  <url>https://nittenapps.dev/docs/project/${project.artifactId}</url>
+  <url>https://nittenapps.github.io/${project.artifactId}</url>
   <inceptionYear>2020</inceptionYear>
 
   <organization>
@@ -33,9 +33,17 @@
     <url>https://nittenapps.dev</url>
   </organization>
 
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
   <developers>
     <developer>
-      <id>sergio</id>
+      <id>swdelvalle-na</id>
       <name>Sergio Del Valle</name>
       <email>sergio@nittenapps.dev</email>
       <timezone>America/Mexico_City</timezone>
@@ -49,31 +57,38 @@
   </developers>
 
   <scm>
-    <connection>scm:git:https://github.com/nittenapps/jira-maven-plugin.git</connection>
-    <developerConnection>scm:git:https://github.com/nittenapps/jira-maven-plugin.git</developerConnection>
-    <url>https://github.com/nittenapps/jira-maven-plugin</url>
+    <connection>scm:git:https://github.com/NittenApps/jira-maven-plugin.git</connection>
+    <developerConnection>scm:git:https://github.com/NittenApps/jira-maven-plugin.git</developerConnection>
+    <url>https://github.com/NittenApps/jira-maven-plugin/tree/${project.scm.tag}</url>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
     <system>github</system>
-    <url>https://github.com/nittenapps/jira-maven-plugin/issues</url>
+    <url>https://github.com/NittenApps/jira-maven-plugin/issues</url>
   </issueManagement>
 
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+    </repository>
+    <snapshotRepository>
+      <id>github</id>
+    </snapshotRepository>
+    <site>
+      <id>github</id>
+      <url>scm:git:https://github.com/NittenApps/jira-maven-plugin.git</url>
+    </site>
+  </distributionManagement>
 
   <properties>
     <doxia.version>1.9.1</doxia.version>
     <maven.version>3.6.3</maven.version>
 
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
@@ -171,8 +186,6 @@
   </dependencies>
 
   <build>
-    <defaultGoal>clean install site</defaultGoal>
-
     <pluginManagement>
       <plugins>
         <plugin>
@@ -256,6 +269,21 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <version>3.0.0-M1</version>
+          <configuration>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+            <localCheckout>true</localCheckout>
+            <preparationGoals>clean install</preparationGoals>
+            <pushChanges>false</pushChanges>
+            <releaseProfiles>reporting,release</releaseProfiles>
+            <tagNameFormat>@{project.version}</tagNameFormat>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.scm</groupId>
+              <artifactId>maven-scm-provider-gitexe</artifactId>
+              <version>1.11.2</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -273,6 +301,19 @@
               <version>1.9</version>
             </dependency>
           </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-scm-publish-plugin</artifactId>
+          <version>3.0.0</version>
+          <configuration>
+            <scmBranch>gh-pages</scmBranch>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -351,6 +392,39 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>release</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <profile>
       <id>reporting</id>
 
@@ -440,15 +514,6 @@
           </plugin>
         </plugins>
       </reporting>
-    </profile>
-    <profile>
-      <id>jdk-11-config</id>
-      <activation>
-        <jdk>11</jdk>
-      </activation>
-      <properties>
-        <javadocExecutable>/Library/Java/JavaVirtualMachines/jdk-11.0.5.jdk/Contents/Home/bin/javadoc</javadocExecutable>
-      </properties>
     </profile>
   </profiles>
 </project>

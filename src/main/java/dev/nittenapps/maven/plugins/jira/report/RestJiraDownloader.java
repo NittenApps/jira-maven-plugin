@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Sergio Walberto Del Valle y Gutiérrez (NittenApps)
+ * Copyright (c) 2020. Sergio Walberto Del Valle y Gutiérrez (NittenApps)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.nittenapps.maven.plugins.jira;
+package dev.nittenapps.maven.plugins.jira.report;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +32,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import dev.nittenapps.maven.plugins.issues.Issue;
+import dev.nittenapps.maven.plugins.jira.JiraHelper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.configuration.security.ProxyAuthorizationPolicy;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
@@ -66,7 +67,7 @@ class RestJiraDownloader extends AbstractJiraDownloader {
 
     @Override
     public void doExecute() throws Exception {
-        Map<String, String> urlMap = JiraHelper.getJiraUrlAndProjectName(project.getIssueManagement().getUrl());
+        Map<String, String> urlMap = JiraHelper.getJiraUrlAndProjectKey(project.getIssueManagement().getUrl());
         String jiraUrl = urlMap.get("url");
         WebClient client = setupWebClient(jiraUrl);
 

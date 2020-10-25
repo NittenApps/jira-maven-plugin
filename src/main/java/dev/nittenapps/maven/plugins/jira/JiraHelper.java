@@ -21,51 +21,16 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-class JiraHelper {
-    /**
-     * Get the base URL for the JIRA server.
-     *
-     * @param url URL.
-     * @return the base URL.
-     */
-    public static String getBaseUrl(String url) {
-        int index = url.indexOf("/", 8); // Ignore http:// or https://
-        return url.substring(0, index);
-    }
-
-    static Map<String, String> getJiraUrlAndProjectId(String issueManagementUrl) {
-        String url = StringUtils.removeEnd(issueManagementUrl, "/");
-        int pos = url.indexOf('?');
-        String id = "";
-        if (pos >= 0) {
-            id = url.substring(url.lastIndexOf('=') + 1);
-        }
-
-        String jiraUrl = url.substring(0, url.lastIndexOf('/'));
-        if (jiraUrl.endsWith("secure")) {
-            jiraUrl = jiraUrl.substring(0, jiraUrl.lastIndexOf('/'));
-        } else {
-            final int index = jiraUrl.indexOf("/browse");
-            if (index != -1) {
-                jiraUrl = jiraUrl.substring(0, index);
-            }
-        }
-
-        Map<String, String> urlMap = new HashMap<>(4);
-        urlMap.put("url", jiraUrl);
-        urlMap.put("id", id);
-        return urlMap;
-    }
-
+public final class JiraHelper {
     /**
      * Parse out the base URL for JIRA and the JIRA project name from the issue management URL. The issue management URL
      * is assumed to be of the format http(s)://host:port/browse/{projectname}
      *
      * @param issueManagementUrl The URL to the issue management system
      * @return A <code>Map</code> containing the URL and project name
-     * @since 2.8
+     * @since 0.2.0
      */
-    public static Map<String, String> getJiraUrlAndProjectName(String issueManagementUrl) {
+    public static Map<String, String> getJiraUrlAndProjectKey(String issueManagementUrl) {
         final int indexBrowse = issueManagementUrl.indexOf("/browse");
 
         String jiraUrl;

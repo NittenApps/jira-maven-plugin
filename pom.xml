@@ -79,13 +79,15 @@
     </snapshotRepository>
     <site>
       <id>github</id>
-      <url>scm:git:https://github.com/NittenApps/jira-maven-plugin.git</url>
+      <url>${project.scm.developerConnection}</url>
     </site>
   </distributionManagement>
 
   <properties>
     <doxia.version>1.9.1</doxia.version>
     <maven.version>3.6.3</maven.version>
+    <maven-scm.version>1.11.2</maven-scm.version>
+    <wagon.version>3.4.1</wagon.version>
 
     <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
     <maven.compiler.source>11</maven.compiler.source>
@@ -188,6 +190,19 @@
   </dependencies>
 
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-gitexe</artifactId>
+        <version>${maven-scm.version}</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-scm</artifactId>
+        <version>${wagon.version}</version>
+      </extension>
+    </extensions>
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -279,18 +294,20 @@
             <releaseProfiles>reporting,release</releaseProfiles>
             <tagNameFormat>@{project.version}</tagNameFormat>
           </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.scm</groupId>
-              <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.11.2</version>
-            </dependency>
-          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-scm-publish-plugin</artifactId>
+          <version>3.0.0</version>
+          <configuration>
+            <scmBranch>gh-pages</scmBranch>
+            <tryUpdate>true</tryUpdate>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -303,14 +320,6 @@
               <version>1.9</version>
             </dependency>
           </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-scm-publish-plugin</artifactId>
-          <version>3.0.0</version>
-          <configuration>
-            <scmBranch>gh-pages</scmBranch>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -389,6 +398,18 @@
         <configuration>
           <outputEncoding>UTF-8</outputEncoding>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+            <version>${maven-scm.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-scm</artifactId>
+            <version>${wagon.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
@@ -434,6 +455,15 @@
         <checkstyle.config.location>src/site/resources/checkstyle.xml</checkstyle.config.location>
       </properties>
 
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-scm-publish-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+
       <reporting>
         <plugins>
           <plugin>
@@ -447,6 +477,8 @@
               </reportSet>
             </reportSets>
             <configuration>
+              <columnNames>Type,Key,Summary,Assignee,Status,Fix Version</columnNames>
+              <includeOpenIssues>false</includeOpenIssues>
               <onlyCurrentVersion>true</onlyCurrentVersion>
             </configuration>
           </plugin>
@@ -497,6 +529,10 @@
             </reportSets>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+          </plugin>
+          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>versions-maven-plugin</artifactId>
             <version>2.8.1</version>
@@ -509,10 +545,6 @@
                 </reports>
               </reportSet>
             </reportSets>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
           </plugin>
         </plugins>
       </reporting>

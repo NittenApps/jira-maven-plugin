@@ -166,7 +166,7 @@ public class JiraMojo extends AbstractJiraReport {
     private String sortColumnNames;
 
     /**
-     * Sets the status(es) that you want to fetch from JIRA. Valid statuses are: <code>Open</code>,
+     * Sets the status(es) that you want to fetch from JIRA. Valid statuses are: <code>Open</code>, <code>To Do</code>,
      * <code>In Progress</code>, <code>Reopened</code>, <code>Resolved</code>, <code>Done</code> and
      * <code>Closed</code>. Multiple values can be separated by commas.
      */

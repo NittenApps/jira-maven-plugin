@@ -302,7 +302,7 @@ class RestJiraDownloader extends AbstractJiraDownloader {
     }
 
     private void processResolution(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (val != null && val.get("name") != null) {
             issue.setResolution(val.get("name").asText());
         }
     }

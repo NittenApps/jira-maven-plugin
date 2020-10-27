@@ -27,6 +27,39 @@ addressing the cloud platform authentication, and using the version 3 of the JIR
 ## Usage
 This project acts as a regular reporting plugin, so you only need to add it to your reporting plugins list.
 
+You must add the repository for this plugin, by adding it in the maven `settings.xml`.
+
+```xml
+<settings>
+  ...
+  <profiles>
+    <profile>
+      <id>extra-repos</id>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>github</id>
+          <name>GitHub NittenApps Apache Maven JIRA Plugin Repository</name>
+          <url>https://maven.pkg.github.com/NittenApps/jira-maven-plugin</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>extra-repos</activeProfile>
+  </activeProfiles>
+  ...
+</settings>
+```
+
+Then you can add the plugin to your project reporting plugins.
+
 ```xml
 <project>
   ...

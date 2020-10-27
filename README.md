@@ -79,7 +79,7 @@ Then you can add the plugin to your project reporting plugins.
 </project>
 ```
 
-In order to authenticate to your JIRA Cloud account this plugin uses the server configuration in the Maven settings
+In order to authenticate to your JIRA Cloud account, this plugin uses the server configuration in the Maven settings
 file, you just need to create an API Token, and supply it as the password of your JIRA account.
 
 ```xml

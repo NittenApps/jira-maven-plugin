@@ -10,7 +10,8 @@ on:
       - '*.*.*'
 
 jobs:
-  build:
+  release:
+    name: Publish new release
     runs-on: ubuntu-latest
 
     steps:
